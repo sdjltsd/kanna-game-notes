@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TITLE - YOUR DESCRIPTION">
+  <title>TITLE</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+  <style>
+    :root {
+      --bg-primary: #1a1a2e;
+      --bg-secondary: #16213e;
+      --bg-card: #0f3460;
+      --text-primary: #e8e8e8;
+      --text-secondary: #a0a0a0;
+      --accent: #e94560;
+      --accent-secondary: #533483;
+      --border: #2a2a4a;
+      --link: #00d9ff;
+      --success: #00ff88;
+      --warning: #ffaa00;
+      --sidebar-width: 280px;
+      --shadow: rgba(0,0,0,0.3);
+      --hover-bg: rgba(255,255,255,0.05);
+    }
+
+    body.light-theme {
+      --bg-primary: #f5f7fa;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --text-primary: #2d3748;
+      --text-secondary: #718096;
+      --accent: #e94560;
+      --accent-secondary: #9f7aea;
+      --border: #e2e8f0;
+      --link: #3182ce;
+      --success: #38a169;
+      --warning: #dd6b20;
+      --shadow: rgba(0,0,0,0.1);
+      --hover-bg: rgba(233, 69, 96, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      font-size: 16px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* ===== 侧边栏 ===== */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      z-index: 1001;
+      transition: transform 0.3s ease;
+      padding: 20px 0;
+    }
+
+    .sidebar-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .sidebar-title {
+      font-size: 1.1em;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-nav { padding: 0 12px; }
+    .sidebar-section { margin-bottom: 8px; }
+
+    .sidebar-section-title {
+      font-size: 0.75em;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 8px 12px 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9em;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      gap: 8px;
+    }
+
+    .sidebar-link:hover {
+      background: rgba(233, 69, 96, 0.15);
+      color: var(--link);
+      transform: translateX(4px);
+    }
+
+    .sidebar-link.active {
+      background: rgba(233, 69, 96, 0.2);
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .sidebar-link.sub {
+      padding-left: 28px;
+      font-size: 0.85em;
+    }
+
+    .sidebar-link.sub::before {
+      content: '▸';
+      font-size: 0.7em;
+      opacity: 0.5;
+    }
+
+    .sidebar-group { margin-bottom: 4px; }
+
+    .sidebar-group > .sidebar-link { justify-content: space-between; }
+
+    .sidebar-group > .sidebar-group-items {
+      display: none;
+      margin-left: 8px;
+      border-left: 1px solid var(--border);
+      padding-left: 8px;
+    }
+
+    .sidebar-group.open > .sidebar-group-items { display: block; }
+
+    .sidebar-group.open > .sidebar-link .toggle-icon { transform: rotate(90deg); }
+
+    .toggle-icon {
+      font-size: 0.7em;
+      transition: transform 0.2s;
+      opacity: 0.6;
+    }
+
+    /* ===== 移动端 ===== */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 70px; left: 16px;
+      z-index: 1002;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+
+    .menu-toggle:hover { background: var(--accent); }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+
+    /* ===== 顶部导航 ===== */
+    .top-nav {
+      position: fixed;
+      top: 0;
+      left: var(--sidebar-width);
+      right: 0;
+      background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-links { display: flex; gap: 16px; }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--link); }
+
+    .theme-toggle {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 1.1em;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .theme-toggle:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      transform: scale(1.05);
+    }
+
+    /* ===== 主容器 ===== */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 24px 40px;
+      margin-left: calc(var(--sidebar-width) + 20px);
+    }
+
+    /* ===== 标题样式 ===== */
+    h1 {
+      font-size: 2.2em;
+      text-align: center;
+      margin-bottom: 24px;
+      color: var(--text-primary);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 16px;
+    }
+
+    h2 {
+      font-size: 1.6em;
+      margin: 48px 0 20px;
+      padding: 12px 0 12px 16px;
+      border-left: 4px solid var(--accent);
+      color: var(--text-primary);
+    }
+
+    h3 {
+      font-size: 1.3em;
+      margin: 32px 0 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h4 {
+      font-size: 1.1em;
+      margin: 24px 0 12px;
+      color: var(--link);
+    }
+
+    h5 {
+      font-size: 1em;
+      margin: 16px 0 8px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* ===== 引用块 ===== */
+    blockquote {
+      background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+      border-left: 4px solid var(--accent);
+      padding: 16px 20px;
+      margin: 16px 0;
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+    }
+
+    blockquote p { margin: 0; }
+    blockquote strong { color: var(--text-primary); }
+
+    /* ===== 表格 ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    tr:hover { background: rgba(255,255,255,0.03); }
+    td { color: var(--text-secondary); }
+
+    /* ===== 链接 ===== */
+    a {
+      color: var(--link);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    /* ===== 列表 ===== */
+    ul, ol { padding-left: 24px; margin: 12px 0; }
+    li { margin: 6px 0; color: var(--text-secondary); }
+
+    /* ===== 代码/强调 ===== */
+    strong { color: var(--success); }
+
+    code {
+      background: var(--bg-card);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 0.9em;
+    }
+
+    /* ===== 分割线 ===== */
+    hr {
+      border: none;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+      margin: 32px 0;
+    }
+
+    /* ===== 目录导航 ===== */
+    .toc {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 32px 0;
+    }
+
+    .toc-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toc ul { list-style: none; padding-left: 0; }
+    .toc ul ul { padding-left: 20px; }
+    .toc li { margin: 8px 0; }
+    .toc a { color: var(--text-secondary); font-size: 0.95em; }
+    .toc a:hover { color: var(--link); }
+
+    /* ===== 章节卡片 ===== */
+    .section-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      transition: border-color 0.3s;
+    }
+
+    .section-card:hover { border-color: var(--accent); }
+
+    /* ===== 卡片网格 ===== */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .tip-card {
+      background: var(--bg-card);
+      border-radius: 8px;
+      padding: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .tip-card strong { color: var(--warning); }
+
+    /* ===== 返回顶部 ===== */
+    .back-to-top {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      width: 48px; height: 48px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5em;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      text-decoration: none;
+    }
+
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover {
+      transform: translateY(-4px);
+      text-decoration: none;
+      color: white;
+    }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 1024px) {
+      :root { --sidebar-width: 260px; }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      .menu-toggle { display: flex; align-items: center; gap: 6px; }
+      .top-nav { left: 0; padding-left: 50px; }
+      .container { margin-left: 0; padding: 70px 16px 24px; }
+      h1 { font-size: 1.6em; }
+      h2 { font-size: 1.3em; }
+      table { font-size: 0.9em; }
+      th, td { padding: 8px 10px; }
+      .back-to-top { bottom: 16px; right: 16px; width: 40px; height: 40px; }
+    }
+
+    /* ===== 滚动条 ===== */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--bg-card); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    /* ===== 亮色主题额外 ===== */
+    body.light-theme .section-card { box-shadow: 0 2px 8px var(--shadow); }
+    body.light-theme .sidebar { background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); }
+    body.light-theme .sidebar-link:hover { background: var(--hover-bg); }
+    body.light-theme .back-to-top { box-shadow: 0 4px 12px var(--shadow); }
+    body.light-theme .tip-card { box-shadow: 0 2px 8px var(--shadow); }
+    body.light-theme .toc { box-shadow: 0 2px 8px var(--shadow); }
+  </style>
+</head>
+<body>
+  <!-- ===== 侧边栏 - 在此修改目录 ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">
+        <span>📖</span>
+        <span>文章导航</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <!--
+        ====== 在这里添加目录链接 ======
+        格式: <a href="#章节ID" class="sidebar-link">📖 章节标题</a>
+        子目录添加 class="sidebar-link sub"
+        分组使用 sidebar-group
+      -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">📚 目录</div>
+        <a href="#overview" class="sidebar-link">🏠 首页</a>
+        <a href="#section1" class="sidebar-link">📖 第一章</a>
+        <a href="#section2" class="sidebar-link">📖 第二章</a>
+        <a href="#section3" class="sidebar-link">📖 第三章</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <button class="menu-toggle" id="menuToggle"><span>☰</span><span>目录</span></button>
+
+  <!-- ===== 顶部导航 ===== -->
+  <nav class="top-nav">
+    <div class="nav-title">
+      <span>📖</span>
+      <span>文章标题</span>
+    </div>
+    <div class="nav-links">
+      <a href="#overview">首页</a>
+      <button class="theme-toggle" id="themeToggle" title="切换主题">
+        <span class="theme-icon">🌙</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== 内容区域 ===== -->
+  <div class="container">
+    
+    <!-- 首页 -->
+    <header id="overview">
+      <h1>📖 文章标题</h1>
+    </header>
+
+    <!--
+      ========================================
+      在下方粘贴你的 Markdown/HTML 内容
+      ========================================
+    -->
+
+    <!-- ===== 示例章节 - 请删除或修改 ===== -->
+    <div class="section-card" id="section1">
+      <h3>📖 第一章：示例章节</h3>
+      
+      <h4>章节简介</h4>
+      <blockquote>
+        <p>这里是章节简介内容...</p>
+      </blockquote>
+
+      <h5>步骤表格示例</h5>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>操作</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>执行操作A</td><td>获取道具</td></tr>
+          <tr><td>2</td><td>执行操作B</td><td>触发剧情</td></tr>
+        </tbody>
+      </table>
+
+      <blockquote>
+        <p>💡 <strong>提示</strong>：这里是重要的游戏提示内容。</p>
+      </blockquote>
+    </div>
+
+    <div class="section-card" id="section2">
+      <h3>📖 第二章：示例章节</h3>
+      <p>这里是第二章的内容...</p>
+    </div>
+
+    <div class="section-card" id="section3">
+      <h3>📖 第三章：示例章节</h3>
+      <p>这里是第三章的内容...</p>
+    </div>
+
+    <!-- 技巧卡片示例 -->
+    <h2 id="tips">💡 实用技巧</h2>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <p><strong>💡 技巧1</strong></p>
+        <p>技巧说明内容...</p>
+      </div>
+      <div class="tip-card">
+        <p><strong>💡 技巧2</strong></p>
+        <p>技巧说明内容...</p>
+      </div>
+    </div>
+
+    <!-- 底部目录 -->
+    <nav class="toc" id="toc">
+      <h2 class="toc-title">📑 目录</h2>
+      <ul>
+        <li><a href="#overview">🏠 首页</a></li>
+        <li><a href="#section1">📖 第一章</a></li>
+        <li><a href="#section2">📖 第二章</a></li>
+        <li><a href="#section3">📖 第三章</a></li>
+      </ul>
+    </nav>
+
+  </div>
+
+  <a href="#" class="back-to-top" id="backToTop" title="返回顶部">↑</a>
+
+  <script>
+    // 返回顶部
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      backToTop.classList.toggle('visible', window.scrollY > 300);
+    });
+
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (window.innerWidth <= 768) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('open');
+          }
+        }
+      });
+    });
+
+    // 移动端菜单
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const menuToggle = document.getElementById('menuToggle');
+
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('open');
+    });
+
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('open');
+    });
+
+    // 侧边栏分组
+    document.querySelectorAll('.sidebar-group > .sidebar-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        if (e.currentTarget.parentElement.classList.contains('sidebar-group')) {
+          e.preventDefault();
+          e.currentTarget.parentElement.classList.toggle('open');
+        }
+      });
+    });
+
+    // 高亮当前章节
+    const sections = document.querySelectorAll('h2[id], h3[id], .section-card[id]');
+    const navLinks = document.querySelectorAll('.sidebar-link');
+
+    function highlightNav() {
+      let current = '';
+      sections.forEach(section => {
+        if (window.scrollY >= section.offsetTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+          const group = link.closest('.sidebar-group');
+          if (group) group.classList.add('open');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', highlightNav);
+    highlightNav();
+
+    // 主题切换
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('.theme-icon');
+    const savedTheme = localStorage.getItem('theme');
+
+    function initTheme() {
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+        themeIcon.textContent = '☀️';
+      }
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const isLight = document.body.classList.toggle('light-theme');
+      themeIcon.textContent = isLight ? '☀️' : '🌙';
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
+
+    initTheme();
+  </script>
+</body>
+</html>
