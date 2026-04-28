@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="大逆转裁判1&2完整流程攻略 | 成步堂龙之介的冒险">
+  <title>大逆转裁判 1&2 流程攻略</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>">
+  <style>
+    :root {
+      /* 暗色主题（默认） */
+      --bg-primary: #1a1a2e;
+      --bg-secondary: #16213e;
+      --bg-card: #0f3460;
+      --text-primary: #e8e8e8;
+      --text-secondary: #a0a0a0;
+      --accent: #e94560;
+      --accent-secondary: #533483;
+      --border: #2a2a4a;
+      --link: #00d9ff;
+      --success: #00ff88;
+      --warning: #ffaa00;
+      --sidebar-width: 280px;
+      --shadow: rgba(0,0,0,0.3);
+      --hover-bg: rgba(255,255,255,0.05);
+    }
+
+    /* 亮色主题 */
+    body.light-theme {
+      --bg-primary: #f5f7fa;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --text-primary: #2d3748;
+      --text-secondary: #718096;
+      --accent: #e94560;
+      --accent-secondary: #9f7aea;
+      --border: #e2e8f0;
+      --link: #3182ce;
+      --success: #38a169;
+      --warning: #dd6b20;
+      --shadow: rgba(0,0,0,0.1);
+      --hover-bg: rgba(233, 69, 96, 0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      font-size: 16px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* 侧边栏 */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      z-index: 1001;
+      transition: transform 0.3s ease;
+      padding: 20px 0;
+    }
+
+    .sidebar-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .sidebar-title {
+      font-size: 1.1em;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-nav {
+      padding: 0 12px;
+    }
+
+    .sidebar-section {
+      margin-bottom: 8px;
+    }
+
+    .sidebar-section-title {
+      font-size: 0.75em;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 8px 12px 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9em;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      gap: 8px;
+    }
+
+    .sidebar-link:hover {
+      background: rgba(233, 69, 96, 0.15);
+      color: var(--link);
+      transform: translateX(4px);
+    }
+
+    .sidebar-link.active {
+      background: rgba(233, 69, 96, 0.2);
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .sidebar-link.sub {
+      padding-left: 28px;
+      font-size: 0.85em;
+    }
+
+    .sidebar-link.sub::before {
+      content: '▸';
+      font-size: 0.7em;
+      opacity: 0.5;
+    }
+
+    /* 子菜单折叠 */
+    .sidebar-group {
+      margin-bottom: 4px;
+    }
+
+    .sidebar-group > .sidebar-link {
+      justify-content: space-between;
+    }
+
+    .sidebar-group > .sidebar-group-items {
+      display: none;
+      margin-left: 8px;
+      border-left: 1px solid var(--border);
+      padding-left: 8px;
+    }
+
+    .sidebar-group.open > .sidebar-group-items {
+      display: block;
+    }
+
+    .sidebar-group.open > .sidebar-link .toggle-icon {
+      transform: rotate(90deg);
+    }
+
+    .toggle-icon {
+      font-size: 0.7em;
+      transition: transform 0.2s;
+      opacity: 0.6;
+    }
+
+    /* 移动端菜单按钮 */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 70px;
+      left: 16px;
+      z-index: 1002;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+
+    .menu-toggle:hover {
+      background: var(--accent);
+    }
+
+    /* 遮罩层 */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+
+    /* 顶部导航 */
+    .top-nav {
+      position: fixed;
+      top: 0;
+      left: var(--sidebar-width);
+      right: 0;
+      background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--link);
+    }
+
+    /* 主题切换按钮 */
+    .theme-toggle {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 1.1em;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .theme-toggle:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      transform: scale(1.05);
+    }
+
+    .theme-icon {
+      display: block;
+      line-height: 1;
+    }
+
+    /* 主容器 */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 24px 40px;
+      margin-left: calc(var(--sidebar-width) + 20px);
+    }
+
+    /* 标题样式 */
+    h1 {
+      font-size: 2.2em;
+      text-align: center;
+      margin-bottom: 24px;
+      color: var(--text-primary);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 16px;
+    }
+
+    h2 {
+      font-size: 1.6em;
+      margin: 48px 0 20px;
+      padding: 12px 0;
+      border-left: 4px solid var(--accent);
+      padding-left: 16px;
+      color: var(--text-primary);
+    }
+
+    h3 {
+      font-size: 1.3em;
+      margin: 32px 0 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h4 {
+      font-size: 1.1em;
+      margin: 24px 0 12px;
+      color: var(--link);
+    }
+
+    h5 {
+      font-size: 1em;
+      margin: 16px 0 8px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* 引用块 */
+    blockquote {
+      background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+      border-left: 4px solid var(--accent);
+      padding: 16px 20px;
+      margin: 16px 0;
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+    }
+
+    blockquote p {
+      margin: 0;
+    }
+
+    blockquote strong {
+      color: var(--text-primary);
+    }
+
+    /* 表格样式 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background: rgba(255,255,255,0.03);
+    }
+
+    td {
+      color: var(--text-secondary);
+    }
+
+    /* 链接样式 */
+    a {
+      color: var(--link);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    /* 列表样式 */
+    ul, ol {
+      padding-left: 24px;
+      margin: 12px 0;
+    }
+
+    li {
+      margin: 6px 0;
+      color: var(--text-secondary);
+    }
+
+    /* 代码/证物样式 */
+    strong {
+      color: var(--success);
+    }
+
+    code {
+      background: var(--bg-card);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 0.9em;
+    }
+
+    /* 分割线 */
+    hr {
+      border: none;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+      margin: 32px 0;
+    }
+
+    /* 目录导航 */
+    .toc {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 32px 0;
+    }
+
+    .toc-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toc ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc ul ul {
+      padding-left: 20px;
+    }
+
+    .toc li {
+      margin: 8px 0;
+    }
+
+    .toc a {
+      color: var(--text-secondary);
+      font-size: 0.95em;
+    }
+
+    .toc a:hover {
+      color: var(--link);
+    }
+
+    /* 章节卡片 */
+    .section-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      transition: border-color 0.3s;
+    }
+
+    .section-card:hover {
+      border-color: var(--accent);
+    }
+
+    /* 步骤表格 */
+    .step-table th {
+      background: var(--accent-secondary);
+    }
+
+    /* 进度条 */
+    progress {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--bg-card);
+      margin: 16px 0;
+    }
+
+    progress::-webkit-progress-value {
+      background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+      border-radius: 4px;
+    }
+
+    /* 通用技巧卡片 */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .tip-card {
+      background: var(--bg-card);
+      border-radius: 8px;
+      padding: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .tip-card strong {
+      color: var(--warning);
+    }
+
+    /* 返回顶部 */
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 48px;
+      height: 48px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5em;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      text-decoration: none;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-4px);
+      text-decoration: none;
+      color: white;
+    }
+
+    /* 响应式 */
+    @media (max-width: 1024px) {
+      :root {
+        --sidebar-width: 260px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .sidebar-overlay.open {
+        display: block;
+      }
+
+      .menu-toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .top-nav {
+        left: 0;
+        padding-left: 50px;
+      }
+
+      .container {
+        margin-left: 0;
+        padding: 70px 16px 24px;
+      }
+
+      h1 {
+        font-size: 1.6em;
+      }
+
+      h2 {
+        font-size: 1.3em;
+      }
+
+      table {
+        font-size: 0.9em;
+      }
+
+      th, td {
+        padding: 8px 10px;
+      }
+
+      .back-to-top {
+        bottom: 16px;
+        right: 16px;
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    /* 滚动条样式 */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--bg-card);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+
+    /* emoji图标高亮 */
+    .emoji-icon {
+      font-size: 1.1em;
+    }
+
+    /* 亮色主题额外样式 */
+    body.light-theme .section-card {
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+
+    body.light-theme .sidebar {
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    }
+
+    body.light-theme .sidebar-link:hover {
+      background: var(--hover-bg);
+    }
+
+    body.light-theme .back-to-top {
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    body.light-theme .tip-card {
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+
+    body.light-theme .toc {
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+  </style>
+</head>
+<body>
+  <!-- 侧边栏 -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">
+        <span>⚖️</span>
+        <span>大逆转裁判攻略</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <!-- 基础导航 -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">📚 导航</div>
+        <a href="#overview" class="sidebar-link">📖 总览</a>
+        <a href="#characters" class="sidebar-link">🧑‍🤝‍🧑 核心人物</a>
+      </div>
+
+      <!-- 大逆转裁判1 -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">⚔️ 大逆转裁判 1</div>
+        <div class="sidebar-group">
+          <a href="#daiichi" class="sidebar-link">
+            <span>📖 一代章节</span>
+            <span class="toggle-icon">▾</span>
+          </a>
+          <div class="sidebar-group-items">
+            <a href="#d1-1" class="sidebar-link sub">🎬 D1-1 伟大起航</a>
+            <a href="#d1-2" class="sidebar-link sub">🎬 D1-2 好友与斑点带子</a>
+            <a href="#d1-3" class="sidebar-link sub">🎬 D1-3 疾走之密室</a>
+            <a href="#d1-4" class="sidebar-link sub">🎬 D1-4 吾辈与雾之夜</a>
+            <a href="#d1-5" class="sidebar-link sub">🎬 D1-5 不可说之故事</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 大逆转裁判2 -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">⚔️ 大逆转裁判 2</div>
+        <div class="sidebar-group">
+          <a href="#daini" class="sidebar-link">
+            <span>📖 二代章节</span>
+            <span class="toggle-icon">▾</span>
+          </a>
+          <div class="sidebar-group-items">
+            <a href="#d2-1" class="sidebar-link sub">🎬 D2-1 辩护少女</a>
+            <a href="#d2-2" class="sidebar-link sub">🎬 D2-2 雾夜回想</a>
+            <a href="#d2-3" class="sidebar-link sub">🎬 D2-3 未来科学</a>
+            <a href="#d2-4" class="sidebar-link sub">🎬 D2-4 扭曲狩魔</a>
+            <a href="#d2-5" class="sidebar-link sub">🎬 D2-5 觉悟</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 其他 -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">🛠️ 其他</div>
+        <a href="#tips" class="sidebar-link">💡 通用技巧</a>
+        <a href="#references" class="sidebar-link">🔗 参考资料</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- 遮罩层 -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- 移动端菜单按钮 -->
+  <button class="menu-toggle" id="menuToggle">
+    <span>☰</span>
+    <span>目录</span>
+  </button>
+
+  <!-- 顶部导航 -->
+  <nav class="top-nav">
+    <div class="nav-title">
+      <span class="emoji-icon">⚖️</span>
+      <span>大逆转裁判攻略</span>
+    </div>
+    <div class="nav-links">
+      <a href="#overview">总览</a>
+      <a href="#daiichi">一代</a>
+      <a href="#daini">二代</a>
+      <a href="#tips">技巧</a>
+      <a href="#toc">目录</a>
+      <button class="theme-toggle" id="themeToggle" title="切换主题">
+        <span class="theme-icon">🌙</span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- 标题 -->
+    <header id="overview">
+      <h1>⚖️ 大逆转裁判 1&2 流程攻略</h1>
+      <progress value="100" max="100"></progress>
+    </header>
+
+    <!-- 游戏简介 -->
+    <blockquote>
+      <p><strong>游戏简介</strong>：大逆转裁判是《逆转裁判》系列前传，主角为<strong>成步堂龙之介</strong>（成步堂龙一的先祖），故事发生于19世纪末明治维新时代的日本与英国。两部合称《大逆转裁判编年史》（Chronicles），兼容 3DS / NS / PS4 / Steam / 移动版。</p>
+      <p style="margin-top:12px;"><strong>核心机制</strong>：</p>
+      <ul style="margin-top:8px;">
+        <li>🔍 <strong>侦探模式</strong>：调查现场、收集证物、与角色对话</li>
+        <li>⚖️ <strong>法庭模式</strong>：对证言「举证」（指出矛盾）或「威慑」（强制逼问）</li>
+        <li>🧠 <strong>推理秀</strong>（1代）：与福尔摩斯合作推理，修正他夸张错误的结论</li>
+        <li>👥 <strong>多证人制度 + 最终辩论</strong>（2代新增）：可移动视角盘问其他证人，陪审团最终投票前发起最终辩论逆转局面</li>
+      </ul>
+    </blockquote>
+
+    <!-- 核心人物 -->
+    <h2 id="characters">🧑‍🤝‍🧑 核心人物</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>人物</th>
+          <th>身份</th>
+          <th>备注</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>成步堂龙之介</td>
+          <td>主角·辩护律师</td>
+          <td>成步堂龙一的先祖，热血正义的留学生</td>
+        </tr>
+        <tr>
+          <td>御琴羽寿沙都</td>
+          <td>法务助手</td>
+          <td>女主角，进步派大和抚子，喜欢侦探小说</td>
+        </tr>
+        <tr>
+          <td>亚双义一真</td>
+          <td>好友·司法留学生</td>
+          <td>背负秘密，其父为亚双义玄真</td>
+        </tr>
+        <tr>
+          <td>夏洛克·福尔摩斯</td>
+          <td>世纪大侦探</td>
+          <td>观察力敏锐但推理常大暴走，需成步堂纠正</td>
+        </tr>
+        <tr>
+          <td>爱丽丝·华生</td>
+          <td>8岁医学博士</td>
+          <td>与福尔摩斯同居，推理能力出众</td>
+        </tr>
+        <tr>
+          <td>巴洛克·班吉克斯</td>
+          <td>检察官"死神"</td>
+          <td>哥哥克里姆特是被陷害的"教授"</td>
+        </tr>
+        <tr>
+          <td>亚双义玄真</td>
+          <td>亚双义一真之父</td>
+          <td>十年前被首席法官陷害顶替"教授"罪名</td>
+        </tr>
+        <tr>
+          <td>哈特·沃尔特克斯</td>
+          <td>英国首席法官</td>
+          <td>幕后终极黑手，策划"教授案件"与私刑组织</td>
+        </tr>
+        <tr>
+          <td>慈狱政士郎</td>
+          <td>日本法官</td>
+          <td>受沃尔特克斯要挟参与交换杀人</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <!-- 一代总览 -->
+    <h2 id="daiichi">📖 大逆转裁判 1：成步堂龙之介的冒险</h2>
+    
+    <h3>📋 章节总览</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>话数</th>
+          <th>标题</th>
+          <th>被告人</th>
+          <th>案件概要</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>D1-1</td>
+          <td>伟大起航的冒险</td>
+          <td><strong>成步堂龙之介</strong>（本人）</td>
+          <td>英国医学博士约翰·H·华生在日本西餐厅死亡，龙之介成为嫌疑人</td>
+        </tr>
+        <tr>
+          <td>D1-2</td>
+          <td>好友与斑点带子的冒险</td>
+          <td><strong>成步堂龙之介</strong>（嫌疑人）</td>
+          <td>前往英国的邮轮上，好友亚双义坠海"死亡"，龙之介再度受疑（纯侦探章，无法庭）</td>
+        </tr>
+        <tr>
+          <td>D1-3</td>
+          <td>疾走之密室的冒险</td>
+          <td><strong>科泽尼·梅根达尔</strong></td>
+          <td>初到伦敦，为慈善家梅根达尔辩护，行驶中的马车密室谋杀</td>
+        </tr>
+        <tr>
+          <td>D1-4</td>
+          <td>吾辈与雾之夜的冒险</td>
+          <td><strong>夏目漱石</strong></td>
+          <td>日本留学生夏目漱石被控伤人，雾夜街道背后的隐情</td>
+        </tr>
+        <tr>
+          <td>D1-5</td>
+          <td>不可说之故事的冒险</td>
+          <td><strong>吉娜·雷斯垂德</strong></td>
+          <td>当铺老板哈奇被杀，案件牵涉法务部机密电报与亚双义一真</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- D1-1 -->
+    <div class="section-card" id="d1-1">
+      <h3>🎬 D1-1：伟大起航的冒险</h3>
+      <blockquote>
+        <p><strong>概要</strong>：英国医学博士约翰·H·华生在明治大学食堂离奇死亡，成步堂龙之介成为最大嫌疑人。在好友亚双义一真帮助下，龙之介踏上法庭为自己辩护。</p>
+      </blockquote>
+
+      <h4>⚖️ 法庭(1)</h4>
+      <table class="step-table">
+        <thead>
+          <tr>
+            <th>问题</th>
+            <th>答案/操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>今天为被告进行辩护的是？</td><td>任选（两个均可，有彩蛋）</td></tr>
+          <tr><td>本案的被害人是？</td><td>举证：约*·H·华*（举证其他人有彩蛋）</td></tr>
+          <tr><td>被害人的死因？</td><td>举证：<strong>尸体检查记录</strong> → 获得：被害人的照片</td></tr>
+          <tr><td>法官让不要插嘴…怎么办？</td><td>任选 → 获得：<strong>服务生的名片</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h5>证言 <sub>目击到的事</sub></h5>
+      <table>
+        <thead>
+          <tr><th>证言内容</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>「漆黑的学童向英国绅士开枪了！」</td><td><strong>举证：被害人的照片</strong> → 获得：现场照片</td></tr>
+          <tr><td>进入证言 <sub>真凶的根据</sub></td><td>—</td></tr>
+          <tr><td>「餐厅里除了我们之外一个客人都没有！」</td><td><strong>威慑</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h5>关键证物操作：病历卡</h5>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>对「华*医生的病历卡应该要求作为证物提交吗？」→ <strong>选择提出申请</strong> → 获得：病历卡</td></tr>
+          <tr><td>2</td><td>🔄 <strong>旋转病历卡</strong> → 点击后方左上角 → 调查 → 再调查正文 → <strong>证物更新</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(2)</h4>
+      <p><strong>获得证物：</strong> 现场照片（更新）、手提包的照片</p>
+      <table>
+        <thead>
+          <tr><th>证言/问题</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>对「我们只点了一份牛排」</td><td><strong>威慑</strong></td></tr>
+          <tr><td>怎么样，刚刚的证词…</td><td>选择「<strong>有重要的意义</strong>」</td></tr>
+          <tr><td>对「牛排我自己吃，还用装有碳酸水的玻璃杯和教授干杯」</td><td><strong>举证：现场照片</strong></td></tr>
+          <tr><td>将玻璃杯装在"手提包"中带走…重要的问题是？</td><td>选：<strong>"手提包"有问题</strong></td></tr>
+          <tr><td>这上面重大的"问题"是什么…请指出来！</td><td><strong>举证：照片右边被害人手中的烫伤</strong></td></tr>
+          <tr><td>证明被害人的"烫伤"与本案有联系的证据是什么…！</td><td><strong>举证：现场照片</strong></td></tr>
+          <tr><td>被害人"烫伤"的原因…究竟是什么！</td><td><strong>举证：铁板右边的刻印</strong></td></tr>
+          <tr><td>案发当天，在手腕被"烫伤"的时候，华*教授…</td><td>选：<strong>已经死了</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(3)</h4>
+      <p><strong>获得证物：</strong> 洁泽尔的报告</p>
+      <table>
+        <thead>
+          <tr><th>问题</th><th>答案/操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>还要在这次审理中"讨论"的新证据是什么…！</td><td><strong>举证：洁泽尔的报告</strong></td></tr>
+          <tr><td>"线索"都应该在手上了。那个玻璃瓶里的剧毒…</td><td>选：<strong>有</strong></td></tr>
+          <tr><td>即使喝下了有毒的水，证人依然平安无恙的原因究竟是什么…！</td><td><strong>举证：洁泽尔的报告</strong></td></tr>
+          <tr><td>这份资料…哪个项目是你主张的"答案"！</td><td>选择：「<strong>特性</strong>」的内容</td></tr>
+          <tr><td>为什么只有被害人因为箭毒丧命了？</td><td><strong>举证：病历卡</strong></td></tr>
+          <tr><td>揭露杀害华*教授的凶手的"线索"就是…！</td><td><strong>举证：铁盘左边的血迹</strong></td></tr>
+          <tr><td>调查牛排的盘子</td><td>选中牛排，点击调查 → 选中金币 → 点击举证</td></tr>
+          <tr><td>出现在牛排下面的金币…它的"主人"的名字就是…！</td><td><strong>举证：园日暮三文</strong></td></tr>
+          <tr><td>偷走园日暮老人的金币，并将它藏在牛肉下的可恨的犯人是谁…</td><td><strong>举证：涡久丸泰三</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- D1-2 -->
+    <div class="section-card" id="d1-2">
+      <h3>🎬 D1-2：好友与斑点带子的冒险</h3>
+      <blockquote>
+        <p><strong>概要</strong>：成步堂偷渡跟随亚双义前往英国的邮轮，亚双义一真意外坠海"死亡"，龙之介再成嫌疑人。本话为<strong>纯侦探调查章节，没有法庭环节</strong>。通过推理秀与福尔摩斯合作调查船舱密室和宠物蛇真相。</p>
+      </blockquote>
+
+      <h4>🔍 侦探(1)</h4>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>操作</th><th>获得证物</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>与寿沙都对话</td><td>—</td><td>—</td></tr>
+          <tr><td>Q：我要将我无辜的证明…指出来</td><td><strong>举证：『不能打开』的符咒</strong></td><td>—</td></tr>
+          <tr><td>调查图中几处（详细调查）</td><td>—</td><td>—</td></tr>
+          <tr><td>与福尔摩斯对话</td><td>—</td><td><strong>革命家的报道、现场照片、亚**义的日记</strong></td></tr>
+          <tr><td>调查革命家的报道的背面的正上方</td><td>—</td><td><strong>舞女的报道</strong></td></tr>
+          <tr><td>与细长悟对话</td><td><strong>举证：亚**义的日记</strong></td><td>—</td></tr>
+          <tr><td>移动到船内·走廊</td><td>—</td><td>—</td></tr>
+          <tr><td>与门前的船员对话</td><td>—</td><td>—</td></tr>
+          <tr><td>调查衣柜里的福尔摩斯</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+
+      <h4>🔍 侦探(1) — 推理秀</h4>
+      <h5>Topic 1：老人的身份</h5>
+      <table>
+        <thead>
+          <tr><th>问题</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Q 你想要用你那把剪刀剪下你帅气的胡子！</td><td><strong>举证：漂亮的金发</strong></td></tr>
+          <tr><td>Q 指明你真实身份的证据…就是…</td><td><strong>举证：舞女的报道</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h5>Topic 2：犯下的罪</h5>
+      <table>
+        <thead>
+          <tr><th>问题</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Q 你的"罪行"…指证它的证据就是那个旅行箱！</td><td><strong>举证：宝冠</strong></td></tr>
+          <tr><td>Q 不打开旅行箱的理由…都写在书架的书上了</td><td><strong>举证：注意事项</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>🔍 侦探(2)</h4>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>操作</th><th>获得证物</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>移动到亚**义的船舱</td><td>—</td><td>—</td></tr>
+          <tr><td>与细长悟对话</td><td>—</td><td><strong>尸体检查记录、地上的痕迹</strong></td></tr>
+          <tr><td>移动到船内·走廊</td><td>—</td><td>—</td></tr>
+          <tr><td>与右侧的福尔摩斯对话</td><td>—</td><td><strong>航海日志</strong></td></tr>
+          <tr><td>移动到妮可米娜的船舱</td><td>—</td><td>—</td></tr>
+          <tr><td>调查标记的地方</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+
+      <h4>🔍 侦探(3)</h4>
+      <h5>Topic 1：入侵者的真相</h5>
+      <table>
+        <thead>
+          <tr><th>问题</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Q 回忆起那起案件，你那小小的心会痛，也是理所当然的。</td><td><strong>举证：爪痕伤口</strong></td></tr>
+          <tr><td>Q 你的"朋友"…当然就是这蛇了！</td><td><strong>举证：小猫</strong></td></tr>
+          <tr><td>Q 那个…自然就是蛇的蜕皮了</td><td><strong>举证：逗猫棒</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h5>Topic 2：死亡之谜</h5>
+      <table>
+        <thead>
+          <tr><th>问题</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Q 被害人的"死因"…可怕的剧毒会告诉我们这一点！</td><td><strong>举证：尸体检查记录</strong></td></tr>
+          <tr><td>Q 夺走被害人生命的"证据"…就被你藏在了旅行箱里</td><td><strong>举证：垃圾桶</strong></td></tr>
+          <tr><td>Q 证明这玻璃钟与妮可米娜小姐有联系的"证据"…那就是！</td><td><strong>举证：妮可&小猫的照片</strong></td></tr>
+        </tbody>
+      </table>
+
+      <blockquote>
+        <p>💡 <strong>本话结尾</strong>：成步堂继承亚双义的遗志与武士刀"<strong>狩魔</strong>"，正式前往英国。</p>
+      </blockquote>
+    </div>
+
+    <!-- D1-3 -->
+    <div class="section-card" id="d1-3">
+      <h3>🎬 D1-3：疾走之密室的冒险</h3>
+      <blockquote>
+        <p><strong>概要</strong>：初到伦敦，成步堂被首席判官安排为慈善家<strong>科泽尼·梅根达尔</strong>辩护，对手是号称"死神"的传奇检察官<strong>巴洛克·班吉克斯</strong>。案发现场是一辆行驶中的马车密室——被害人<strong>三烧莫尔塔</strong>在马车内遭人刺杀，真相隐藏在天窗与血迹之中。</p>
+      </blockquote>
+
+      <h4>🔍 侦探</h4>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>操作</th><th>获得证物</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>与沃尔特克斯对话</td><td>—</td><td>—</td></tr>
+          <tr><td>Q 本国的另一个律师，那就是…</td><td>任选</td><td>—</td></tr>
+          <tr><td>Q 面对这蛮不讲理的试验，应该如何回答呢…</td><td>任选</td><td>—</td></tr>
+          <tr><td>移动到中央刑事法院</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(1)</h4>
+      <p><strong>获得证物：</strong> 尸体解剖记录、<strong>现场照片</strong>、被告的皮手套</p>
+      <blockquote>
+        <p>⚠️ <strong>建议在「合乘马车」证物获取后存档</strong>，后续需要多次更新此证物。</p>
+      </blockquote>
+
+      <h5>证言 <sub>目击到的事</sub></h5>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>操作</th><th>获得证物</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>开场</td><td>—</td><td><strong>合乘马车</strong></td></tr>
+          <tr><td>对「的确…是用匕首刺进去的！我当时就叫了起来…」</td><td><strong>威慑</strong></td><td><strong>凶器匕首</strong></td></tr>
+          <tr><td>威慑剩下的几句话</td><td>—</td><td><strong>顾客账簿</strong></td></tr>
+          <tr><td>Q …最终辩论…留给我们的最后的"权利"…</td><td><strong>主张权利</strong></td><td>—</td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(2)</h4>
+      <p><strong>最终辩论：</strong></p>
+      <table>
+        <thead>
+          <tr><th>攻击方式</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>攻击矛盾</strong></td><td>2号「4名乘客，收到20便士…那个车夫的记性很好，值得信赖。」和5号「马车工会的车夫都是诚实的人。费用什么时候都是4便士，不会说谎」</td></tr>
+          <tr><td><strong>攻击矛盾</strong></td><td>3号「那家伙就是像这样刺杀了坐在他旁边的人…我也做不出来啊！」和6号「居然用匕首刺杀倒在地上的被害人！简直难以置信…」</td></tr>
+        </tbody>
+      </table>
+
+      <h5>证言 <sub>真正看到的事</sub></h5>
+      <table>
+        <thead>
+          <tr><th>证言</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>对「不管怎么样，如果马车里有其他的客人，我们肯定也能看得到的」</td><td><strong>威慑</strong></td></tr>
+          <tr><td>Q 从天窗能看到马车内所有的客人…吗</td><td>选择：<strong>有看不到的可能性</strong></td></tr>
+          <tr><td>Q 合乘马车的车内…有其他"乘客"存在的"可能性"的地方</td><td><strong>举证：马车后座</strong></td></tr>
+          <tr><td>Q 有可能坐在证人们"死角"位子上的那个人…</td><td>选择：<strong>有想到什么</strong></td></tr>
+          <tr><td>Q 马车里…坐在死角位子上的人就是！</td><td><strong>举证：柯泽尼·梅根达尔</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(3)</h4>
+      <h5>证言 <sub>少女看到的《案件》</sub></h5>
+      <table>
+        <thead>
+          <tr><th>问题</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Q 这辆马车的储物箱的里面到底是什么样的呢…</td><td>选择：<strong>是空的</strong></td></tr>
+          <tr><td>对「我很怕黑黑的地方，就好像被关起来了一样。」</td><td><strong>盘问：梅根达尔</strong></td></tr>
+          <tr><td>Q 刚刚吉娜小姐的话怎么样…</td><td>选择：<strong>非常重要</strong></td></tr>
+          <tr><td>Q 还有其他『应该听到』的"声音"的。那就是…</td><td><strong>指出人物</strong></td></tr>
+          <tr><td>Q 她没听到有关这个人物的"声音"就很奇怪了！</td><td><strong>举证：三烧莫尔塔</strong></td></tr>
+          <tr><td>Q 被害人"出现"在马车中，可以想到的"可能性"就是…！</td><td><strong>从除了门之外的地方上车</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- D1-4 -->
+    <div class="section-card" id="d1-4">
+      <h3>🎬 D1-4：吾辈与雾之夜的冒险</h3>
+      <blockquote>
+        <p><strong>概要</strong>：日本留学生<strong>夏目漱石</strong>在伦敦雾夜被指控伤人。成步堂受命为这位陷入绝境的同胞辩护，揭开了一起看似过失伤人案背后的隐情。案件同时埋下"教授"连环杀人案的伏笔。</p>
+      </blockquote>
+
+      <h4>🔍 侦探(1)</h4>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>操作</th><th>获得证物</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>与沃尔特克斯对话</td><td>—</td><td>—</td></tr>
+          <tr><td>与旁边的刑警对话</td><td>—</td><td>—</td></tr>
+          <tr><td>移动到布莱雅路</td><td>—</td><td>—</td></tr>
+          <tr><td>移动到拘留所</td><td>—</td><td>—</td></tr>
+          <tr><td>与夏*石对话</td><td>—</td><td>—</td></tr>
+          <tr><td>与格雷格森对话</td><td>—</td><td><strong>现场地图</strong></td></tr>
+          <tr><td>移动到福尔摩斯的房间</td><td>—</td><td>—</td></tr>
+          <tr><td>与爱丽丝对话</td><td>—</td><td><strong>爱丽丝的卡片</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>🔍 侦探(2)</h4>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>操作</th><th>获得证物</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>举证：爱丽丝的卡片</td><td>—</td><td>—</td></tr>
+          <tr><td>移动到夏目漱石的公寓</td><td>—</td><td>—</td></tr>
+          <tr><td>调查桌子</td><td>—</td><td><strong>二手书店的收据</strong></td></tr>
+          <tr><td>与福尔摩斯对话</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+
+      <h4>🔍 侦探(2) — 推理秀</h4>
+      <h5>Topic 1：暴君的真身</h5>
+      <table>
+        <thead>
+          <tr><th>问题</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Q 在这里逞威的猛兽到底是什么？能解答这个问题的就是狮子铜像！</td><td><strong>举证：加里德布夫人</strong></td></tr>
+          <tr><td>Q 您的口袋…其中就有消失的猛兽的"线索"！</td><td><strong>举证：结婚戒指</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(1)</h4>
+      <p><strong>获得证物：</strong> 案件资料、凶器匕首、<strong>现场照片</strong></p>
+
+      <p><strong>最终辩论：</strong></p>
+      <table>
+        <thead>
+          <tr><th>证言</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>对5号「别管那么多了，快结束吧！我还得去找今天的工作呢！」</td><td><strong>威慑</strong></td></tr>
+          <tr><td><strong>攻击矛盾</strong></td><td>3号「根本没有理由会从二手书店绕一个大圈再回家！」和5号「案发那天我在《梅下姆路》挖了一整天！」</td></tr>
+          <tr><td><strong>攻击矛盾</strong></td><td>2号「眼前有一个穿着绿外套的人倒下」和6号「那天傍晚我在卡拉巴修路上滑倒，晕了过去。」</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- D1-5 -->
+    <div class="section-card" id="d1-5">
+      <h3>🎬 D1-5：不可说之故事的冒险</h3>
+      <blockquote>
+        <p><strong>概要</strong>：当铺老板哈奇被枪杀于保险库中，案件牵涉法务部机密电报与亚双义一真的下落。通过立体视镜和自鸣琴的摩斯电码，真相逐渐浮出水面。</p>
+      </blockquote>
+
+      <h4>🔍 侦探(1)</h4>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>操作</th><th>获得证物</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>与福尔摩斯对话</td><td>—</td><td>—</td></tr>
+          <tr><td>移动到爱丽丝的房间</td><td>—</td><td>—</td></tr>
+          <tr><td>与爱丽丝对话</td><td>—</td><td><strong>爱丽丝的原稿</strong></td></tr>
+          <tr><td>与沃尔特克斯对话</td><td>—</td><td>—</td></tr>
+          <tr><td>移动到拘留所</td><td>—</td><td>—</td></tr>
+          <tr><td>与吉娜对话</td><td>—</td><td><strong>白猫的照片、吉娜的委托书</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>🔍 侦探(4)</h4>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>操作</th><th>获得证物</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>调查白猫的照片的背面</td><td>—</td><td><strong>抵押证（小箱子）</strong></td></tr>
+          <tr><td>调查门旁边的日历和视角左边的柜台</td><td>—</td><td><strong>血液判别标本</strong></td></tr>
+          <tr><td>与爱丽丝对话</td><td>—</td><td><strong>白猫的照片2.</strong></td></tr>
+          <tr><td>举证：抵押证（外套）</td><td>—</td><td>—</td></tr>
+          <tr><td>Q 事实上，你知道这血的"主人"是谁…是吗！</td><td>选择：<strong>事实上，知道</strong></td></tr>
+          <tr><td>Q …这"血"的主人的名字恐怕就是…</td><td><strong>三烧莫尔塔</strong></td></tr>
+          <tr><td>Q 我最终的"答案"就是相信吉娜小姐与否…</td><td><strong>相信吉娜</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(1)</h4>
+      <p><strong>获得证物：</strong> 今日的报纸、<strong>尸体解剖记录、现场照片、案发现场的平面图、哈奇的手枪</strong></p>
+
+      <p><strong>最终辩论：</strong></p>
+      <table>
+        <thead>
+          <tr><th>证言</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>对2号「作为女仆，碍眼的东西就要马上清理掉…仅此而已。」</td><td><strong>威慑</strong></td></tr>
+          <tr><td><strong>攻击矛盾</strong></td><td>2号「那对兄弟身为垃圾…居然向侦探大人开枪，简直死刑。」和6号「不能以貌取人，那对兄弟什么都没做。」</td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(2)</h4>
+      <p><strong>证言 <sub>遇到被害人</sub></strong></p>
+      <table>
+        <thead>
+          <tr><th>问题</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Q 能射杀哈奇先生的…真的就只有吉娜小姐吗？</td><td>选择：<strong>还有</strong></td></tr>
+          <tr><td>Q 除了被告之外，还有人可能行凶的话，那个人是从哪开枪的呢…！</td><td><strong>举证：保险库门的右边（保险库外侧）</strong></td></tr>
+          <tr><td>Q 在中弹的瞬间，被害人在什么地方…？</td><td><strong>举证：保险库</strong></td></tr>
+          <tr><td>Q 那么那时候能从保险库的里面锁上门的"人"会是谁呢？</td><td><strong>举证：吉娜·雷斯特雷德</strong></td></tr>
+        </tbody>
+      </table>
+
+      <blockquote>
+        <p>🎊 <strong>大逆转裁判1 完结</strong> —— 真相尚未全部揭晓，续集《大逆转裁判2》接续本作剧情，揭开"教授案件"的终极真相。</p>
+      </blockquote>
+    </div>
+
+    <hr>
+
+    <!-- 二代总览 -->
+    <h2 id="daini">📖 大逆转裁判 2：成步堂龙之介的觉悟</h2>
+
+    <h3>📋 章节总览</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>话数</th>
+          <th>标题</th>
+          <th>被告人</th>
+          <th>案件概要</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>D2-1</td>
+          <td>辩护少女的觉醒与冒险</td>
+          <td><strong>村雨叶织</strong></td>
+          <td>九个月前的被害人洁泽尔·布雷特在引渡前被杀，寿沙都女扮男装首次上法庭</td>
+        </tr>
+        <tr>
+          <td>D2-2</td>
+          <td>吾辈与雾夜的回想</td>
+          <td><strong>夏目漱石</strong></td>
+          <td>漱石无罪释放后第二天再度被控杀人，隐藏冰硬币瓦斯盗窃的惊天阴谋</td>
+        </tr>
+        <tr>
+          <td>D2-3</td>
+          <td>未来科学与亡灵的归还</td>
+          <td><strong>本杰明·多比恩波</strong></td>
+          <td>伦敦世博会上"传送装置"致人死亡，蜡像绑架案背后教授案件真相浮现</td>
+        </tr>
+        <tr>
+          <td>D2-4</td>
+          <td>扭曲的狩魔与最后的致谢</td>
+          <td><strong>巴洛克·班吉克斯</strong></td>
+          <td>苏格兰场刑警格雷格森被杀，"死神"检察官班吉克斯成为被告</td>
+        </tr>
+        <tr>
+          <td>D2-5</td>
+          <td>成步堂龙之介的觉悟</td>
+          <td><strong>巴洛克·班吉克斯</strong></td>
+          <td>最终章，揭开十年前"教授案件"与幕后黑手哈特·沃尔特克斯的全部真相</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- D2-1 -->
+    <div class="section-card" id="d2-1">
+      <h3>🎬 D2-1：辩护少女的觉醒与冒险</h3>
+      <blockquote>
+        <p><strong>概要</strong>：寿沙都返回日本发现父亲无恙，此时九个月前杀害华生博士的凶手<strong>洁泽尔·布雷特</strong>在引渡前被杀，嫌疑人指向<strong>村雨叶织</strong>。寿沙都女扮男装化名"成步堂龙太郎"，第一次站上法庭为闺蜜辩护。</p>
+      </blockquote>
+
+      <h4>⚖️ 法庭(1)</h4>
+      <table>
+        <thead>
+          <tr><th>问题</th><th>答案/操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>被害人名字</td><td>洁*尔·*雷*（选其他两个有彩蛋）</td></tr>
+          <tr><td>隐藏在"留学生"面具下的身份</td><td><strong>杀人者</strong>（选其他两个有彩蛋）</td></tr>
+          <tr><td>必须问清楚的"那句话"</td><td><strong>三个都要问</strong></td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>获得证物：</strong> 现场照片、漱石的报纸报道、钢笔</p>
+
+      <h5>证言 <sub>目击到的场景</sub></h5>
+      <table>
+        <thead>
+          <tr><th>证言</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>「我看到那把再次举起的刀刃上有血。这《证明》凶手凶残地刺了被害人好几下。」</td><td><strong>举证：尸体化验记录</strong></td></tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+          <tr><th>问题</th><th>答案/操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Q 叶织大人"拔出了"刺在被害人身上的凶器…能想到的《理由》就是…</td><td>选择：<strong>为了救人</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(2)</h4>
+      <p><strong>获得证物：</strong> 试剂、凶器小刀、<strong>案发现场的平面图</strong></p>
+
+      <h5>证言 <sub>透过相机看到的真相</sub></h5>
+      <table>
+        <thead>
+          <tr><th>证言</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>「就在这个时候，女学生拔出了小刀，一把拉倒英国女人，把刀冲着后背刺了下去！」</td><td><strong>威慑</strong></td></tr>
+          <tr><td>「豆籾没有进入小屋，没有见到英国女人…豆籾只是一个《观察者》。」</td><td><strong>举证：钢笔</strong></td></tr>
+          <tr><td>Q 隐藏在钢笔中的"线索"…揭露它主人是谁的『根据』就是！</td><td><strong>举证：底部徽章</strong></td></tr>
+          <tr><td>Q 真凶是从什么地方…又是怎么样刺杀被害人的呢！</td><td>两个选项均可</td></tr>
+          <tr><td>Q 被害人被刺中的瞬间…那个人躲在什么地方！</td><td><strong>举证：小屋的左边</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- D2-2 -->
+    <div class="section-card" id="d2-2">
+      <h3>🎬 D2-2：吾辈与雾夜的回想</h3>
+      <blockquote>
+        <p><strong>概要</strong>：成步堂与爱丽丝翻阅半年前的记录——<strong>夏目漱石</strong>无罪释放的第二天，再次因邻居被毒杀遭告上法庭。案件真相涉及冰硬币、瓦斯盗窃与死刑犯的藏匿财产。</p>
+      </blockquote>
+
+      <h4>🔍 侦探模式(1)</h4>
+      <table>
+        <thead>
+          <tr><th>操作</th><th>获得证物</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>与福尔摩斯对话</td><td>—</td></tr>
+          <tr><td>与病床上的女性对话</td><td>—</td></tr>
+          <tr><td>调查桌子上的照片</td><td><strong>二手书的收据、公寓前的示意图</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>🔍 侦探模式(2) — 推理秀</h4>
+      <table>
+        <thead>
+          <tr><th>话题</th><th>问题</th><th>举证</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Topic 1：被害人的死因</td><td>被害人"吃"了肥皂？叉子证明</td><td><strong>地上另一半的肥皂</strong></td></tr>
+          <tr><td>Topic 1 续</td><td>毒药隐藏在盘子上</td><td><strong>茶杯</strong></td></tr>
+          <tr><td>Topic 2：自杀还是他杀</td><td>唯一的茶杯说明了一切</td><td><strong>另一个茶杯</strong></td></tr>
+          <tr><td>Topic 2 续</td><td>揭开身份</td><td><strong>三本书 → 举证：漱石的书</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(1)</h4>
+      <table>
+        <thead>
+          <tr><th>证言</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>「士的宁不是即时生效的毒药…」</td><td><strong>威慑</strong> → 获得：被害人的诊断记录</td></tr>
+          <tr><td>「被害人锁上了房门…没有任何问题。」</td><td><strong>举证：被害人的诊断记录</strong></td></tr>
+          <tr><td>证言「冬夜的惨剧」</td><td><strong>对每句话威慑</strong></td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>最终辩论：</strong></p>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>威慑1号</td><td>「被害人是一位贫穷但是品行端正的人！」</td></tr>
+          <tr><td>威慑4号</td><td>「也没有证据能证明那个高个子是"坏人"…」</td></tr>
+          <tr><td><strong>攻击矛盾</strong></td><td>1号「如果能证明被害人"说谎"了」和 4号「他是可恨的瓦斯贼」</td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(2)</h4>
+      <table>
+        <thead>
+          <tr><th>证言</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>调查两个杯子</td><td>—</td></tr>
+          <tr><td>调查绿色杯子内部</td><td><strong>证物更新：两个杯子</strong></td></tr>
+          <tr><td>「他假装和我激烈辩论，一口也没有喝自己的茶…」</td><td><strong>举证：两个杯子</strong></td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>最终辩论（第二次）：</strong></p>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>威慑4号</td><td>「瓦斯不是免费的！…」</td></tr>
+          <tr><td>盘问3号</td><td>「有没有这样的《非法瓦斯公司》」</td></tr>
+          <tr><td><strong>攻击矛盾</strong></td><td>3号「用嘴巴对着瓦斯管道用力吹气…」和 6号「被害人嘴巴只碰过红茶」</td></tr>
+          <tr><td>证明"事实"的证据</td><td><strong>举证：墙上的手印</strong></td></tr>
+          <tr><td>这起案件的真凶</td><td><strong>举证：比利简·格林</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- D2-3 -->
+    <div class="section-card" id="d2-3">
+      <h3>🎬 D2-3：未来科学与亡灵的归还</h3>
+      <blockquote>
+        <p><strong>概要</strong>：伦敦世博会上展示了革命性的"传送装置"，却意外致人死亡。同时，著名作家波吉亚·华生被蜡像绑架。本话揭开"教授案件"与亚双义一真生死之谜的关键线索。</p>
+      </blockquote>
+
+      <h4>🔍 侦探模式(1)</h4>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>操作</th><th>获得证物</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>与寿沙都对话</td><td>—</td></tr>
+          <tr><td>2</td><td>移动到世博会会场</td><td>—</td></tr>
+          <tr><td>3</td><td>调查展览品</td><td><strong>博览会地图</strong></td></tr>
+          <tr><td>4</td><td>与格雷格森对话</td><td><strong>案件记录</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>🔍 侦探模式(2)</h4>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>操作</th><th>获得证物</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>与亚双义对话</td><td>—</td></tr>
+          <tr><td>2</td><td>移动到蜡像馆</td><td>—</td></tr>
+          <tr><td>3</td><td>调查蜡像</td><td><strong>蜡像馆地图</strong></td></tr>
+          <tr><td>4</td><td>与福尔摩斯对话</td><td><strong>关键线索</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(1)</h4>
+      <p><strong>获得证物：</strong> 传送装置照片、<strong>目击者证词</strong></p>
+
+      <h5>证言 <sub>传送装置的运作</sub></h5>
+      <table>
+        <thead>
+          <tr><th>证言</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>「传送装置运作时会产生强烈的闪光…」</td><td><strong>威慑</strong></td></tr>
+          <tr><td>「装置内部有特殊的安全机制…」</td><td><strong>举证：传送装置照片</strong></td></tr>
+          <tr><td>「被害人进入装置时没有任何异常…」</td><td><strong>盘问：证人</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(2)</h4>
+      <p><strong>最终辩论：</strong></p>
+      <table>
+        <thead>
+          <tr><th>攻击矛盾</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>攻击矛盾</strong></td><td>传送瞬间的时间差与被害人位置的不合理</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- D2-4 -->
+    <div class="section-card" id="d2-4">
+      <h3>🎬 D2-4：扭曲的狩魔与最后的致谢</h3>
+      <blockquote>
+        <p><strong>概要</strong>：苏格兰场刑警<strong>格雷格森</strong>被杀，"死神"检察官<strong>巴洛克·班吉克斯</strong>被指控为凶手。成步堂必须为曾经的对手辩护，揭开十年前"教授案件"的核心真相。</p>
+      </blockquote>
+
+      <h4>🔍 侦探模式(1)</h4>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>操作</th><th>获得证物</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>与爱丽丝对话</td><td><strong>爱丽丝的护身符</strong></td></tr>
+          <tr><td>2</td><td>移动到苏格兰场</td><td>—</td></tr>
+          <tr><td>3</td><td>调查案发现场</td><td><strong>现场照片、血迹分布图</strong></td></tr>
+          <tr><td>4</td><td>与班吉克斯对话</td><td>—</td></tr>
+        </tbody>
+      </table>
+
+      <h4>🔍 侦探模式(2) — 推理秀</h4>
+      <table>
+        <thead>
+          <tr><th>话题</th><th>问题</th><th>举证</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Topic 1：凶器的真相</td><td>凶器不是普通的刀</td><td><strong>刀柄上的徽章</strong></td></tr>
+          <tr><td>Topic 2：真凶的身份</td><td>凶手有意嫁祸班吉克斯</td><td><strong>现场遗留物证</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(1)</h4>
+      <p><strong>获得证物：</strong> 格雷格森的日记、<strong>案发现场还原图</strong></p>
+
+      <h5>证言 <sub>格雷格森的最后时刻</sub></h5>
+      <table>
+        <thead>
+          <tr><th>证言</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>「案发时我正在追踪重要嫌疑人…」</td><td><strong>威慑</strong></td></tr>
+          <tr><td>「我看到了一个穿黑色外套的人影…」</td><td><strong>举证：现场照片</strong></td></tr>
+          <tr><td>「凶手的动作非常迅速…」</td><td><strong>盘问：目击证人</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(2)</h4>
+      <p><strong>最终辩论：</strong></p>
+      <table>
+        <thead>
+          <tr><th>攻击矛盾</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>攻击矛盾</strong></td><td>格雷格森的证词与他留下的日记内容矛盾</td></tr>
+        </tbody>
+      </table>
+
+      <blockquote>
+        <p>🎊 <strong>第四话 完</strong></p>
+      </blockquote>
+    </div>
+
+    <!-- D2-5 -->
+    <div class="section-card" id="d2-5">
+      <h3>🎬 D2-5：成步堂龙之介的觉悟（最终章）</h3>
+      <blockquote>
+        <p><strong>概要</strong>：成步堂揭开十年前「教授案件」、亚双义玄真越狱事件、机密电报谜团及格雷格森被杀的全部真相。幕后黑手<strong>哈特·沃尔特克斯</strong>首席判官现身，成步堂怀着觉悟走向最后的法庭。</p>
+      </blockquote>
+
+      <h4>⚖️ 法庭(1)</h4>
+      <p><strong>开场获得：</strong> 爱丽丝的护身符</p>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>证言/操作</th><th>举证</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1a</td><td>「…好像是在调查'走私交易'。」</td><td><strong>威慑</strong> → 选：强势询问</td></tr>
+          <tr><td>1b</td><td>调查「教授的介绍信」背面</td><td>证物更新</td></tr>
+          <tr><td>1c</td><td>「'走私交易'的地点是《巴拉布洛克》俱乐部」</td><td><strong>举证：教授的介绍信</strong></td></tr>
+          <tr><td>1d</td><td>打开「格雷格森的箱子」，调查内部</td><td>获得：护照</td></tr>
+          <tr><td>2a</td><td>追问前四句话</td><td>—</td></tr>
+          <tr><td>2c</td><td>找出唯一矛盾的人</td><td><strong>举证：亚双义一真</strong></td></tr>
+          <tr><td>2d</td><td>关联证据</td><td><strong>举证：箱子侧面刮痕中留下的金属片</strong></td></tr>
+          <tr><td>2f</td><td>—</td><td>获得：名刀《狩魔》</td></tr>
+        </tbody>
+      </table>
+
+      <h4>🔍 侦探(1) 上</h4>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>调查左边警报器 → 选「<strong>按</strong>」</td></tr>
+          <tr><td>2</td><td>调查旅行箱、玻璃杯、垃圾桶 → 获得：<strong>船员的行动表</strong></td></tr>
+          <tr><td>3</td><td>调查画框痕迹 → 举证：<strong>有冰的玻璃杯</strong></td></tr>
+          <tr><td>4</td><td>掩盖犯罪痕迹的不自然处 → <strong>举证：注意事项</strong></td></tr>
+          <tr><td>5</td><td>指示说谎的根据 → <strong>举证：钞票</strong></td></tr>
+          <tr><td>6</td><td>猎物躲藏的位置 → <strong>举证：旅行箱</strong></td></tr>
+          <tr><td>7</td><td>解开密码锁 → <strong>输入：523104</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(2)</h4>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>证言/操作</th><th>举证</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>证明慈狱政士郎有关联的证物</td><td><strong>来自日本的国际电报</strong></td></tr>
+          <tr><td>2a</td><td>「案发当晚，船舱的门口一直有警卫船员看守。」</td><td><strong>举证：船员的行动表</strong></td></tr>
+          <tr><td>3</td><td>调查「小小的零件」→ 调查「格雷格森的表的上端」</td><td>证物更新</td></tr>
+          <tr><td>5b</td><td>「我也不可能有任何办法将被害人的尸体运去《英国》啊！」</td><td><strong>举证：纪念照</strong></td></tr>
+          <tr><td>6a</td><td>「格雷格森刑警和华生博士…这两个人和我不存在'交集'。」</td><td><strong>举证：克里姆特的尸体解剖记录</strong></td></tr>
+          <tr><td>6b</td><td>《死神》真正的名字</td><td><strong>举证：哈特·沃尔特克斯</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h4>⚖️ 法庭(3)</h4>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>证言/操作</th><th>举证/答案</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1a</td><td>「却在胃里找到了一个非常美丽非常危险的《证物》…」</td><td><strong>威慑</strong> → 获得：玄真的戒指</td></tr>
+          <tr><td>1b</td><td>「死者体内没有任何创伤，不存在可疑的地方。」</td><td><strong>举证：玄真的戒指</strong></td></tr>
+          <tr><td>1c</td><td>证明亚双义沉默理由的证物</td><td><strong>举证：惩戒辞退信</strong></td></tr>
+          <tr><td>2a</td><td>「我只是丝毫不差地执行了计划…」</td><td><strong>威慑</strong></td></tr>
+          <tr><td>3c</td><td>「我记得《文件》上的文字是'绯色'的…是我看错了吗。」</td><td><strong>举证：克里姆特的尸体解剖记录</strong></td></tr>
+          <tr><td>3d</td><td>遗书的内容</td><td>选：<strong>坦白</strong></td></tr>
+          <tr><td>3e</td><td>说出矛盾的人</td><td>选：<strong>沃尔特克斯卿</strong></td></tr>
+          <tr><td>3f</td><td>证明矛盾的证物</td><td><strong>举证：亚双义文件</strong>（证物更新）</td></tr>
+          <tr><td>5</td><td>再次确认遗书内容</td><td>选：<strong>坦白</strong> → 获得：克里姆特的遗书</td></tr>
+          <tr><td>7</td><td><strong>揭开真相的决定性证据</strong></td><td><strong>举证：克里姆特的遗书</strong></td></tr>
+          <tr><td>9</td><td><strong>最后的护身符</strong></td><td><strong>举证：爱丽丝的护身符</strong></td></tr>
+        </tbody>
+      </table>
+
+      <blockquote>
+        <p>🎊 <strong>大逆转裁判2 最终章完结！</strong></p>
+        <p>十年前的真相、《死神》的真实身份、爱丽丝的来历——所有谜题在此揭晓。成步堂龙之介完成了属于他的觉悟。亚双义一真选择留在英国追随班吉克斯，将武士刀「狩魔」托付给成步堂。</p>
+      </blockquote>
+    </div>
+
+    <hr>
+
+    <!-- 通用技巧 -->
+    <h2 id="tips">💡 通用技巧</h2>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <p><strong>🔄 旋转3D证物</strong></p>
+        <p>遇到证物一定要旋转检查所有面，往往有隐藏信息（尤其钢笔、病历卡等）</p>
+      </div>
+      <div class="tip-card">
+        <p><strong>💬 威慑优先</strong></p>
+        <p>当证言前后矛盾但不确定举什么证时，先尝试威慑</p>
+      </div>
+      <div class="tip-card">
+        <p><strong>🧠 推理秀（1代）</strong></p>
+        <p>福尔摩斯的结论大部分时候是错的，关注他「描述的现象」然后找正确解释</p>
+      </div>
+      <div class="tip-card">
+        <p><strong>👥 多证人模式（2代）</strong></p>
+        <p>可以移动镜头盘问其他证人，打断当前证人来突破僵局</p>
+      </div>
+      <div class="tip-card">
+        <p><strong>⚡ 最终辩论（2代）</strong></p>
+        <p>陪审团表决前必须发起，按提示攻击矛盾来扭转局势</p>
+      </div>
+      <div class="tip-card">
+        <p><strong>❤️ 血条保护</strong></p>
+        <p>选错不会立即失败，多次错误才扣血条；遇到不确定的情况可以先选</p>
+      </div>
+      <div class="tip-card">
+        <p><strong>🎭 彩蛋选项</strong></p>
+        <p>部分问题选错误答案会有有趣的小剧情，推荐二周目探索</p>
+      </div>
+      <div class="tip-card">
+        <p><strong>💾 及时存档</strong></p>
+        <p>D1-3的「合乘马车」证物获取后建议存档，该证物需多次更新</p>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- 参考资料 -->
+    <h2 id="references">🔗 参考资料</h2>
+    <ul>
+      <li><a href="https://baike.baidu.com/item/%E5%A4%A7%E9%80%86%E8%BD%AC%E8%A3%81%E5%88%A4/13827003" target="_blank">百度百科：大逆转裁判</a></li>
+      <li><a href="https://www.bilibili.com/read/cv74984/" target="_blank">B站攻略：大逆转裁判1 第1章</a></li>
+      <li><a href="https://www.bilibili.com/read/cv74985/" target="_blank">B站攻略：大逆转裁判1 第2-3章</a></li>
+      <li><a href="https://www.bilibili.com/read/cv74986/" target="_blank">B站攻略：大逆转裁判1 第4-5章</a></li>
+      <li><a href="https://www.bilibili.com/read/CV626519" target="_blank">B站攻略：大逆转裁判2（一）前言&1-2话</a></li>
+      <li><a href="https://www.bilibili.com/read/CV706692" target="_blank">B站攻略：大逆转裁判2（二）第三话</a></li>
+      <li><a href="https://www.bilibili.com/read/CV707198" target="_blank">B站攻略：大逆转裁判2（三）第四话&最终章</a></li>
+      <li><a href="http://www.dianwannan.com/dnzcp2/6141_1/" target="_blank">电玩男：大逆转裁判2图文攻略</a></li>
+    </ul>
+
+    <hr>
+
+    <!-- 目录导航 -->
+    <nav class="toc" id="toc">
+      <h2 class="toc-title">📑 目录</h2>
+      <ul>
+        <li><a href="#overview">📖 总览</a></li>
+        <li><a href="#characters">🧑‍🤝‍🧑 核心人物</a></li>
+        <li>
+          <a href="#daiichi">📖 大逆转裁判 1</a>
+          <ul>
+            <li><a href="#d1-1">🎬 D1-1：伟大起航的冒险</a></li>
+            <li><a href="#d1-2">🎬 D1-2：好友与斑点带子的冒险</a></li>
+            <li><a href="#d1-3">🎬 D1-3：疾走之密室的冒险</a></li>
+            <li><a href="#d1-4">🎬 D1-4：吾辈与雾之夜的冒险</a></li>
+            <li><a href="#d1-5">🎬 D1-5：不可说之故事的冒险</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#daini">📖 大逆转裁判 2</a>
+          <ul>
+            <li><a href="#d2-1">🎬 D2-1：辩护少女的觉醒与冒险</a></li>
+            <li><a href="#d2-2">🎬 D2-2：吾辈与雾夜的回想</a></li>
+            <li><a href="#d2-3">🎬 D2-3：未来科学与亡灵的归还</a></li>
+            <li><a href="#d2-4">🎬 D2-4：扭曲的狩魔与最后的致谢</a></li>
+            <li><a href="#d2-5">🎬 D2-5：成步堂龙之介的觉悟</a></li>
+          </ul>
+        </li>
+        <li><a href="#tips">💡 通用技巧</a></li>
+        <li><a href="#references">🔗 参考资料</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- 返回顶部按钮 -->
+  <a href="#" class="back-to-top" id="backToTop" title="返回顶部">↑</a>
+
+  <script>
+    // 返回顶部按钮显示/隐藏
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+          // 移动端点击后关闭侧边栏
+          if (window.innerWidth <= 768) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('open');
+          }
+        }
+      });
+    });
+
+    // 移动端菜单切换
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const menuToggle = document.getElementById('menuToggle');
+
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('open');
+    });
+
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('open');
+    });
+
+    // 侧边栏分组折叠
+    document.querySelectorAll('.sidebar-group > .sidebar-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        if (e.currentTarget.parentElement.classList.contains('sidebar-group')) {
+          e.preventDefault();
+          e.currentTarget.parentElement.classList.toggle('open');
+        }
+      });
+    });
+
+    // 滚动时高亮当前章节
+    const sections = document.querySelectorAll('h2[id], h3[id], .section-card[id]');
+    const navLinks = document.querySelectorAll('.sidebar-link');
+
+    function highlightNav() {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (window.scrollY >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+          // 展开对应的分组
+          const group = link.closest('.sidebar-group');
+          if (group && !group.classList.contains('open')) {
+            group.classList.add('open');
+          }
+        }
+      });
+    }
+
+    window.addEventListener('scroll', highlightNav);
+    highlightNav();
+
+    // 主题切换
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('.theme-icon');
+    const savedTheme = localStorage.getItem('theme');
+
+    // 初始化主题
+    function initTheme() {
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+        themeIcon.textContent = '☀️';
+      } else {
+        document.body.classList.remove('light-theme');
+        themeIcon.textContent = '🌙';
+      }
+    }
+
+    // 切换主题
+    themeToggle.addEventListener('click', () => {
+      const isLight = document.body.classList.toggle('light-theme');
+      themeIcon.textContent = isLight ? '☀️' : '🌙';
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
+
+    initTheme();
+  </script>
+</body>
+</html>
